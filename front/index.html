@@ -1,0 +1,87 @@
+<html>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+	<title>Page test Front</title>
+
+	<div class="container">
+		<div class="jumbotron">
+			<h1 class="display-4 text-center"><i class="fas fa-shopping-cart"></i>	Liste de course</h1>
+			<p class="lead text-center">Application de demonstration AWS</p>
+			<hr class="my-4">
+			<ul>
+				<li>Frontend sur AWS S3</li>
+				<li>Backend sur un container Kubernetes AWS EKS</li>
+				<li>Données sur base AWS RDS</li>
+			</ul>
+	  	</div>
+	
+		  <div class="card">
+				<div class="card-header">
+						<i class="fas fa-shopping-cart"></i>  Ma liste de course
+				</div>
+				<div class="card-body">
+						<div class="input-group mb-3">
+								<div class="input-group-prepend">
+								  <button class="btn btn-outline-secondary" type="button" id="add_button" title="Ajouter à la liste" onclick="add()">Ajouter</button>
+								</div>
+								<input type="text" class="form-control" placeholder="" id="add_input">
+							  </div>
+				</div>
+					<ul class="list-group list-group-flush" id="item_list">
+						<li class="list-group-item text-center"><div class="spinner-border" style="width: 20px; height: 20px;" role="status"></div></li>
+					</ul>
+			</div>  
+		  
+	</div>
+	<script>
+		var backend_srv="http://127.0.0.1:8080/todo"
+		function add(){
+			item=document.getElementById('add_input').value;
+			$.ajax({
+			url: backend_srv+'/add/'+item,
+			type: 'GET',
+			dataType: 'html',
+			crossDomain: true,
+			xhrFields: { withCredentials: true },
+			success: function (data) { console.log('added: '+item); list(); }
+			})
+		}
+
+		function del(item){
+			$.ajax({
+			url: backend_srv+'/rm/'+item,
+			type: 'GET',
+			dataType: 'html',
+			crossDomain: true,
+			xhrFields: { withCredentials: true },
+			success: function (data) { console.log('deleted: '+item); list(); }
+			})
+		}
+
+		function list(){
+			$.ajax({
+			url: backend_srv+'/list',
+			type: 'GET',
+			dataType: 'json',
+			crossDomain: true,
+			xhrFields: { withCredentials: true },
+			success: function (data) { 
+			  if (data.length == 0){ 
+					$("#item_list").html( "<li class=\"list-group-item text-center\">Liste vide</li>" ) 		
+				}else{
+					var items = [];
+					$.each( data, function( index, value ) {
+						items.push( "<li class=\"list-group-item d-flex justify-content-between align-items-center\">"+value.name+"<button type=\"button\" class=\"close pull-right\" title=\"Supprimer de la liste\" onclick=\"del("+value.id+")\"><i class=\"far fa-trash-alt\" style=\"font-size: 17px;color:red\"></i></button>" );
+					});
+					$("#item_list").html(items)
+				}
+			},
+			})
+		}
+
+		setInterval(list, 1000);
+	</script>
+</html>
