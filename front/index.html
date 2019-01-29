@@ -37,7 +37,7 @@
 		  
 	</div>
 	<script>
-		var backend_srv="http://127.0.0.1:8080/todo"
+		var backend_srv="http://{backend_url}:{backend_port}/todo"
 		function add(){
 			item=document.getElementById('add_input').value;
 			$.ajax({
