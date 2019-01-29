@@ -6,7 +6,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 /***** DB Part ****/
 const { Pool, Client } = require('pg')
-const connectionString = '{rds_url}' //postgres://{rds_user}:{rds_password}@master:mysuperpassword@rds-cluster.cluster-c2ykdlnzxmcr.us-east-1.rds.amazonaws.com:5432/mydb:{rds_port}/{rds_database}
+const connectionString = 'postgres://{rds_url}' //postgres://{rds_user}:{rds_password}@master:mysuperpassword@rds-cluster.cluster-c2ykdlnzxmcr.us-east-1.rds.amazonaws.com:5432/mydb:{rds_port}/{rds_database}
 const pool = new Pool({  connectionString: connectionString,  })
 /***** ***********/
 
